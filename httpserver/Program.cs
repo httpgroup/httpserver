@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -17,28 +19,38 @@ namespace httpserver
 
             Console.WriteLine("*** Server Log *** \n");
 
-
-            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8080);
+            
+            TcpListener server = new TcpListener(IPAddress.Any, 8888);
             server.Start();
-            Console.WriteLine("***Server running.");
+            Console.WriteLine("*** Server running.");
 
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
                 Socket connectionSocket = server.AcceptSocket();
-                Console.WriteLine("***A client is connecting.");
+                Console.WriteLine("*** A client is connecting.");
 
-                NetworkStream ns = client.GetStream();
-                byte[] hello = new byte[100];
-                hello = Encoding.UTF8.GetBytes("hello world");
+                Stream ns = new NetworkStream(connectionSocket);
 
-                ns.Write(hello, 0, hello.Length);
+                StreamReader sr = new StreamReader(ns);
+                StreamWriter sw = new StreamWriter(ns);
+                sw.AutoFlush = true;
+
+                
+                
+
+                    
+
+
+                }
+
+                
             }
             
            
 
 
-              Console.ReadKey();
+              
         }
     }
 }
