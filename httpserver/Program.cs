@@ -22,6 +22,7 @@ namespace httpserver
             
             TcpListener server = new TcpListener(IPAddress.Any, 8888);
             server.Start();
+
             Console.WriteLine("*** Server running.");
 
             while (true)
@@ -53,4 +54,4 @@ namespace httpserver
               
         }
     }
-}
+
