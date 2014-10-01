@@ -23,6 +23,8 @@ namespace httpserver
 
          //  Socket connectionSocket = server.AcceptSocket();
             
+             string rootCatalog = "c:/temp";
+
 
             while (true)
             {
@@ -34,8 +36,13 @@ namespace httpserver
 
                 StreamReader sr = new StreamReader(servstream);
                 StreamWriter sw = new StreamWriter(servstream);
+                
+
+                
                 string request =  sr.ReadLine();
                 string[] words = request.Split(' ');
+
+
 
                 if (words.Length == 0)
                 {
@@ -43,16 +50,26 @@ namespace httpserver
                 }
 
                 Console.WriteLine("Requested" + words[1]);
-                sw.Write(words[1]);
+              //  sw.Write(words[1]);
+
+                string filename = words[1];
+                string fullfilename = rootCatalog + filename;
+
+                FileStream fs = new FileStream(fullfilename, FileMode.Open, FileAccess.Read);
+                fs.CopyTo(sw.BaseStream);
+
+              //  sw.Write(fs);
+
 
               //  sw.Write("Http/ 1/0 200 ok\r\n");
-              //  sw.Write("\r\n");
-              //  sw.Write("This is a test message.");
+               // sw.Write("\r\n");
+               // sw.Write("This is a test message.");
                 sw.AutoFlush = true;
+                fs.Close();
                 servstream.Close();
                 client.Close();
 
-                ////////////////////////////////////////////////////////////////////////////////
+             
 
 
 
