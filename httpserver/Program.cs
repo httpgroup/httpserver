@@ -16,34 +16,14 @@ namespace httpserver
     {
         static void Main(string[] args)
         {
-
+           
             Console.WriteLine("*** Server Log *** \n");
 
-            
-            TcpListener server = new TcpListener(IPAddress.Any, 8888);
-            server.Start();
+            new HttpServer();
 
-            Console.WriteLine("*** Server running.");
+            Console.ReadKey();
 
-            while (true)
-            {
-                TcpClient client = server.AcceptTcpClient();
-                Socket connectionSocket = server.AcceptSocket();
-                Console.WriteLine("*** A client is connecting.");
-
-                Stream ns = new NetworkStream(connectionSocket);
-
-                StreamReader sr = new StreamReader(ns);
-                StreamWriter sw = new StreamWriter(ns);
-                sw.AutoFlush = true;
-
-                
-                
-
-                    
-
-
-                }
+        }
 
                 
             }
@@ -53,5 +33,5 @@ namespace httpserver
 
               
         }
-    }
+    
 

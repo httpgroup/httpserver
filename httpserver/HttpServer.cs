@@ -16,27 +16,30 @@ namespace httpserver
 
         public HttpServer()
         {
-           TcpListener server = new TcpListener(IPAddress.Any, DefaultPort);
-            server.Start();
-         //   Thread th = new Thread();
-          //  th.Start();
+           
+           TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), DefaultPort);
+           server.Start();
+           Console.WriteLine("*** Server running.");
 
-            Console.WriteLine("*** Server running.");
+           Socket connectionSocket = server.AcceptSocket();
+            
 
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-                Socket connectionSocket = server.AcceptSocket();
+                
                 Console.WriteLine("*** A client is connecting.");
 
-                Stream ns = new NetworkStream(connectionSocket);
+                Stream servstream = client.GetStream();
 
-                StreamReader sr = new StreamReader(ns);
-                StreamWriter sw = new StreamWriter(ns);
+                StreamReader sr = new StreamReader(servstream);
+                StreamWriter sw = new StreamWriter(servstream);
 
-                byte[] hello = new byte[100];
-                hello = Encoding.UTF8.GetBytes("this is a test message.");
-                sw.Write(hello);
+                sw.Write("Http/ 1/0 200 ok\r\n");
+                sw.Write("\r\n");
+                sw.Write("This is a test message.");
+                sw.AutoFlush = true;
+                client.Close();
 
                 
 
