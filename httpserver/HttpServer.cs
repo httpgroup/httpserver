@@ -16,30 +16,30 @@ namespace httpserver
 
         public void HttpServ()
         {
-           
-           TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), DefaultPort);
-           server.Start();
-           Console.WriteLine("*** Server running.");
 
-         //  Socket connectionSocket = server.AcceptSocket();
-            
-             string rootCatalog = "c:/temp";
+            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), DefaultPort);
+            server.Start();
+            Console.WriteLine("*** Server running.");
+
+            //  Socket connectionSocket = server.AcceptSocket();
+
+            string rootCatalog = "c:/temp";
 
 
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-                
+
                 Console.WriteLine("*** A client is connecting.");
 
                 Stream servstream = client.GetStream();
 
                 StreamReader sr = new StreamReader(servstream);
                 StreamWriter sw = new StreamWriter(servstream);
-                
 
-                
-                string request =  sr.ReadLine();
+
+
+                string request = sr.ReadLine();
                 string[] words = request.Split(' ');
 
 
@@ -50,48 +50,83 @@ namespace httpserver
                 }
 
                 Console.WriteLine("Requested" + words[1]);
-              //  sw.Write(words[1]);
+                //  sw.Write(words[1]);
 
                 string filename = words[1];
                 string fullfilename = rootCatalog + filename;
 
-                FileStream fs = new FileStream(fullfilename, FileMode.Open, FileAccess.Read);
-                fs.CopyTo(sw.BaseStream);
+              
 
-              //  sw.Write(fs);
+                //  sw.Write(fs);
 
-
-              //  sw.Write("Http/ 1/0 200 ok\r\n");
-               // sw.Write("\r\n");
-               // sw.Write("This is a test message.");
-                sw.AutoFlush = true;
-                fs.Close();
-                servstream.Close();
-                client.Close();
-
-             
+                try
+                {
 
 
+
+                    try
+                    {
+                        FileStream fs = new FileStream(fullfilename, FileMode.Open, FileAccess.Read);
+
+                        sw.Write("HTTP/1.0 200 OK\r\n");
+                        sw.Write("\r\n");
+                        sw.Flush();
+                        fs.CopyTo(sw.BaseStream);
+                        fs.Close();
+                    }
+
+
+                    catch (FileNotFoundException)
+                    {
+
+                        sw.Write("HTTP/1.0 404 Not Found\n\r");
+                        sw.Write("\r\n");
+                        sw.Flush();
+                    }
 
 
                 }
+
+                catch (Exception)
+                {
+                    sw.Write("HTTP/1.0 400 Illegal request");
+                    sw.Write("\r\n");
+                    sw.Flush();
+                }
+
+
+
+
+
+                // sw.Write("This is a test message.");
+                sw.AutoFlush = true;
+
+                servstream.Close();
+                client.Close();
+
+
+
+
+
+
+            }
         }
 
-   
 
 
-     
 
-    
 
-       
-       
-        
-        
-        }
 
-        
+
+
+
+
+
+
     }
+
+
+}
 
 
 
