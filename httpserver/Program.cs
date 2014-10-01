@@ -16,23 +16,24 @@ namespace httpserver
     {
         static void Main(string[] args)
         {
-           
-            Console.WriteLine("*** Server Log *** \n");
 
-            var newserv = new HttpServer();
+            Console.WriteLine("*** Server Log *** \n");  //This is a log message.
+
+            //Running the server.
+            var newserv = new HttpServer();   
             newserv.HttpServ();
 
 
 
         }
 
-                
-            }
-            
-           
+
+    }
 
 
-              
-        }
-    
+
+
+
+}
+
 
