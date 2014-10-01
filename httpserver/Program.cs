@@ -19,9 +19,10 @@ namespace httpserver
            
             Console.WriteLine("*** Server Log *** \n");
 
-            new HttpServer();
+            var newserv = new HttpServer();
+            newserv.HttpServ();
 
-            Console.ReadKey();
+
 
         }
 

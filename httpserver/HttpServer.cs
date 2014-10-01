@@ -14,14 +14,14 @@ namespace httpserver
     {
         public static readonly int DefaultPort = 8888;
 
-        public HttpServer()
+        public void HttpServ()
         {
            
            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), DefaultPort);
            server.Start();
            Console.WriteLine("*** Server running.");
 
-           Socket connectionSocket = server.AcceptSocket();
+         //  Socket connectionSocket = server.AcceptSocket();
             
 
             while (true)
@@ -35,14 +35,26 @@ namespace httpserver
                 StreamReader sr = new StreamReader(servstream);
                 StreamWriter sw = new StreamWriter(servstream);
                 string request =  sr.ReadLine();
+                string[] words = request.Split(' ');
 
-                sw.Write("Http/ 1/0 200 ok\r\n");
-                sw.Write("\r\n");
-                sw.Write("This is a test message.");
+                if (words.Length == 0)
+                {
+                    throw new Exception("bad request");
+                }
+
+                Console.WriteLine("Requested" + words[1]);
+                sw.Write(words[1]);
+
+              //  sw.Write("Http/ 1/0 200 ok\r\n");
+              //  sw.Write("\r\n");
+              //  sw.Write("This is a test message.");
                 sw.AutoFlush = true;
+                servstream.Close();
                 client.Close();
 
-                
+                ////////////////////////////////////////////////////////////////////////////////
+
+
 
 
                 }
