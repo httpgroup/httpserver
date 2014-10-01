@@ -34,6 +34,7 @@ namespace httpserver
 
                 StreamReader sr = new StreamReader(servstream);
                 StreamWriter sw = new StreamWriter(servstream);
+                string request =  sr.ReadLine();
 
                 sw.Write("Http/ 1/0 200 ok\r\n");
                 sw.Write("\r\n");
