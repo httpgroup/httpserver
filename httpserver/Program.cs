@@ -8,24 +8,25 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 
 namespace httpserver
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
 
-            Console.WriteLine("*** Server Log *** \n");  //This is a log message.
+            Console.WriteLine("*** Server Log *** \n"); //This is a log message.
 
             //Running the server.
-            var newserv = new HttpServer();   
+            var newserv = new HttpServer();
             newserv.HttpServ();
 
+        
 
-
-        }
+    }
 
 
     }

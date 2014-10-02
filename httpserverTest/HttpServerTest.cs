@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using httpserver;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 
 namespace httpserverTest
 {

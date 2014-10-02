@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace httpserver
 {
@@ -17,29 +19,32 @@ namespace httpserver
         /// <summary>
         /// The method running the server starts here.
         /// </summary>
+
+      
+
         public void HttpServ()    
         {
-
             //Server start-up.
             TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), DefaultPort);
             server.Start();
             Console.WriteLine("*** Server running.");
 
-
-
             string rootCatalog = "c:/temp";
 
-
+            
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
 
-                Task task = new Task(() => DoIt(client, rootCatalog));
-                task.Start();
+          
 
+                Task.Run(() => DoIt(client, rootCatalog));
+                    
+                    
 
             }
         }
+        
         
 
         //This is the method in charge of handling client requests.
