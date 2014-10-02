@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -14,31 +16,50 @@ namespace httpserver
 {
     public class HttpServer
     {
+        const string Source = "Csharp HTTP Server";
+        const string SLog = "Application.";
+        const string Message = "Event log occurence.";
+
         public static readonly int DefaultPort = 8888;
 
         /// <summary>
         /// The method running the server starts here.
         /// </summary>
 
-      
+        if (!EventLog.SourceExists(Source))
+            {
+                EventLog.CreateEventSource(Source, SLog);
+            }
 
+        public static void WriteToLogUsingObjectMethods()
+        {
+            string machineName = "."; // this computer
+            using (EventLog log = new EventLog(SLog, machineName, Source))
+            {
+                log.WriteEntry("Hello");
+                log.WriteEntry("Hello again", EventLogEntryType.Information);
+                log.WriteEntry("Hello again again", EventLogEntryType.Information, 14593);
+            }
+      
+            
         public void HttpServ()    
         {
             //Server start-up.
             TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), DefaultPort);
             server.Start();
             Console.WriteLine("*** Server running.");
+            
 
             string rootCatalog = "c:/temp";
 
-            
+
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
+            
+               
 
-          
-
-                Task.Run(() => DoIt(client, rootCatalog));
+                 Task.Run(() => DoIt(client, rootCatalog));
                     
                     
 
