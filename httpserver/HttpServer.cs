@@ -10,15 +10,19 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Diagnostics;
 
 namespace httpserver
 {
     public class HttpServer
     {
-        const string Source = "Csharp HTTP Server";
-        const string SLog = "Application.";
-        const string Message = "Event log occurence.";
+
+        public const string Source = "Http Server";
+        public const string sLog = "Application";
+        public const string Message = "Sample Event blah";
+        public const string machineName = ".";
+        private static EventLog log = new EventLog(sLog, machineName, Source);
+
 
         public static readonly int DefaultPort = 8888;
 
@@ -26,29 +30,18 @@ namespace httpserver
         /// The method running the server starts here.
         /// </summary>
 
-        if (!EventLog.SourceExists(Source))
-            {
-                EventLog.CreateEventSource(Source, SLog);
-            }
 
-        public static void WriteToLogUsingObjectMethods()
-        {
-            string machineName = "."; // this computer
-            using (EventLog log = new EventLog(SLog, machineName, Source))
-            {
-                log.WriteEntry("Hello");
-                log.WriteEntry("Hello again", EventLogEntryType.Information);
-                log.WriteEntry("Hello again again", EventLogEntryType.Information, 14593);
-            }
-      
-            
-        public void HttpServ()    
+
+
+
+
+        public void HttpServ()
         {
             //Server start-up.
             TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), DefaultPort);
             server.Start();
             Console.WriteLine("*** Server running.");
-            
+            log.WriteEntry("Server is now running.");
 
             string rootCatalog = "c:/temp";
 
@@ -56,17 +49,17 @@ namespace httpserver
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-            
-               
 
-                 Task.Run(() => DoIt(client, rootCatalog));
-                    
-                    
+
+
+                Task.Run(() => DoIt(client, rootCatalog));
+                log.WriteEntry("Threading method in use.");
+
 
             }
         }
-        
-        
+
+
 
         //This is the method in charge of handling client requests.
         private static void DoIt(TcpClient client, string rootCatalog)
@@ -82,10 +75,10 @@ namespace httpserver
             string[] words = request.Split(' ');
 
 
-            if (words.Length == 0)
+           /* if (words.Length == 0)
             {
                 throw new Exception("Bad Request.");
-            }
+            } */
 
             Console.WriteLine("Requested " + words[1]);
             //  sw.Write(words[1]);   *previous iteration
@@ -94,7 +87,7 @@ namespace httpserver
             string fullfilename = rootCatalog + filename;
 
 
-           //   sw.Write(fs);   *previous iteration
+            //   sw.Write(fs);   *previous iteration
 
             try
             {
@@ -104,6 +97,7 @@ namespace httpserver
 
                     sw.Write("HTTP/1.0 200 OK\r\n");
                     sw.Write("\r\n");
+                    log.WriteEntry("Browser reply");
                     sw.Flush();
                     fs.CopyTo(sw.BaseStream);
                     fs.Close();
@@ -114,23 +108,26 @@ namespace httpserver
                 {
                     sw.Write("HTTP/1.0 404 Not Found\n\r");
                     sw.Write("\r\n");
+                    log.WriteEntry("404");
                     sw.Flush();
                 }
             }
 
-                catch (Exception)
+            catch (Exception)
             {
                 sw.Write("HTTP/1.0 400 Illegal request");
                 sw.Write("\r\n");
+                log.WriteEntry("400 Illegal Request");
                 sw.Flush();
             }
 
 
-          //   sw.Write("This is a test message.");   *previous iteration
+            //   sw.Write("This is a test message.");   *previous iteration
             sw.AutoFlush = true;
 
             servstream.Close();
             client.Close();
+            log.WriteEntry("client closed");
         }
     }
 
