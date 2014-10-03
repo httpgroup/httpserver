@@ -16,25 +16,18 @@ namespace httpserver
 {
     public class HttpServer
     {
-
+        //logging constants and initialisation
         public const string Source = "Http Server";
         public const string sLog = "Application";
         public const string Message = "Sample Event blah";
         public const string machineName = ".";
         private static EventLog log = new EventLog(sLog, machineName, Source);
 
-
         public static readonly int DefaultPort = 8888;
 
         /// <summary>
         /// The method running the server starts here.
         /// </summary>
-
-
-
-
-
-
         public void HttpServ()
         {
             //Server start-up.
@@ -50,16 +43,10 @@ namespace httpserver
             {
                 TcpClient client = server.AcceptTcpClient();
 
-
-
                 Task.Run(() => DoIt(client, rootCatalog));
                 log.WriteEntry("Threading method in use.");
-
-
             }
         }
-
-
 
         //This is the method in charge of handling client requests.
         private static void DoIt(TcpClient client, string rootCatalog)
@@ -70,15 +57,14 @@ namespace httpserver
             StreamReader sr = new StreamReader(servstream);
             StreamWriter sw = new StreamWriter(servstream);
 
-
             string request = sr.ReadLine();
             string[] words = request.Split(' ');
 
-
-           /* if (words.Length == 0)
-            {
-                throw new Exception("Bad Request.");
-            } */
+            // redundant if below, saved for previous iteration
+            /* if (words.Length == 0)     
+             {
+                 throw new Exception("Bad Request.");
+             } */
 
             Console.WriteLine("Requested " + words[1]);
             //  sw.Write(words[1]);   *previous iteration
@@ -130,8 +116,6 @@ namespace httpserver
             log.WriteEntry("client closed");
         }
     }
-
-
 }
 
 

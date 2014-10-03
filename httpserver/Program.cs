@@ -13,41 +13,23 @@ using System.Diagnostics;
 
 namespace httpserver
 {
-    
-           
     class Program
     {
-
-   
-    
-
         private static void Main(string[] args)
         {
             if (!EventLog.SourceExists(HttpServer.Source))
             {
                 EventLog.CreateEventSource(HttpServer.Source, HttpServer.sLog);
             }
-          //  Console.WriteLine("*** Server Log *** \n"); //This is a log message.
+            //  Console.WriteLine("*** Server Log *** \n"); //This is a log message.
 
             //Running the server.
             var newserv = new HttpServer();
             newserv.HttpServ();
-
-            
-
         }
-
-        
-        }
-
-        
-
-            
-
-        
-
     }
-    }
+}
+
 
 
 
